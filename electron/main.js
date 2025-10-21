@@ -1,5 +1,17 @@
-import { app, BrowserWindow } from 'electron';
-import path from 'path';
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+
+// Enable hot reload for main process in development mode
+if (process.env.NODE_ENV === 'development') {
+  try {
+    require('electron-reloader')(module, {
+      watchRenderer: false, // Don't watch renderer process since Vite handles that
+      ignore: [/node_modules|[\/\\]\./, /dist|[\/\\]\./, /assets|[\/\\]\./]
+    });
+  } catch (_) {
+    console.log('Error with electron-reloader');
+  }
+}
 
 const createWindow = () => {
   const win = new BrowserWindow({
