@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
-import { getPendingMutations } from 'src/services/queueService'
-import { pullServerChanges, syncPendingMutations } from 'src/services/syncService'
+import { getPendingMutations } from '@/services/queueService'
+import { pullServerChanges, syncPendingMutations } from '@/services/syncService'
 
 interface UseDataSyncOptions {
   syncInterval?: number // in ms
