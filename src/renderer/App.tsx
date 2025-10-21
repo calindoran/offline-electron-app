@@ -1,6 +1,6 @@
+import { AlertCircle, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { AlertCircle, RefreshCw } from 'lucide-react'
 import Layout from './components/Layout'
 import { useDataSync } from './hooks/useDataSync'
 import ItemsTablePage from './pages/ItemsTablePage'

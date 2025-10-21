@@ -1,13 +1,13 @@
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle, RotateCcw, Save } from 'lucide-react'
 import { useId } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import type { LocalEntity } from '../../db/indexedDb'
 import { useMutateItem } from '../hooks/useMutateItem'
 
@@ -20,8 +20,8 @@ const itemFormSchema = z.object({
 type ItemFormValues = z.infer<typeof itemFormSchema>
 
 interface ItemFormProps {
-  defaultValues?: ItemFormValues;
-  onClose?: () => void;
+  defaultValues?: ItemFormValues
+  onClose?: () => void
 }
 
 export default function ItemForm({ defaultValues, onClose }: ItemFormProps) {

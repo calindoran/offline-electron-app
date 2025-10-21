@@ -1,3 +1,6 @@
+import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { Edit, Plus, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -8,9 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { Edit, Plus, Trash2 } from 'lucide-react'
-import { useState } from 'react'
 import type { LocalEntity } from '../../db/indexedDb'
 import ItemForm from '../components/ItemForm'
 import { useItems } from '../hooks/useItems'
@@ -70,11 +70,15 @@ export default function ItemsTablePage() {
       {isFormVisible && (
         <div className="mb-8">
           <ItemForm
-            defaultValues={editingItem ? {
-              id: editingItem.id,
-              name: editingItem.name,
-              notes: editingItem.notes
-            } : undefined}
+            defaultValues={
+              editingItem
+                ? {
+                    id: editingItem.id,
+                    name: editingItem.name,
+                    notes: editingItem.notes,
+                  }
+                : undefined
+            }
             onClose={handleFormClose}
           />
         </div>
