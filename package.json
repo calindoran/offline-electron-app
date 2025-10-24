@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "concurrently \"npm:dev:react\" \"npm:dev:electron\"",
     "dev:react": "vite",
-    "dev:electron": "NODE_ENV=development electron .",
+    "dev:electron": "cross-env NODE_ENV=development electron .",
     "build": "vite build",
     "pack": "npm run build && electron-builder --mac",
     "pack:win": "npm run build && electron-builder --win",
@@ -80,6 +80,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
     "electron": "^38.3.0",
     "electron-builder": "^26.0.12",
     "electron-reloader": "^1.2.3",
