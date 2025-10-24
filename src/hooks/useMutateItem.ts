@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { db, type LocalEntity } from '../../db/indexedDb'
-import { addToQueue } from '../../services/queueService'
+import { db, type LocalEntity } from '../db/indexedDb'
+import { addToQueue } from '../services/queueService'
 
 export const useMutateItem = () => {
   const queryClient = useQueryClient()

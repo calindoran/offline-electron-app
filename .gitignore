@@ -19,6 +19,9 @@ build/
 # TypeScript
 *.tsbuildinfo
 
+# TanStack Router
+src/routeTree.gen.ts
+
 # Logs
 logs
 *.log
