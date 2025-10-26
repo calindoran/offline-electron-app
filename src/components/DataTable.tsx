@@ -1,25 +1,17 @@
 import {
   type ColumnDef,
   type ColumnFiltersState,
-  type SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { ArrowUpDown, ArrowUp, ArrowDown, X, Search } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, Search, X } from 'lucide-react'
 import React from 'react'
 import { Input } from '@/components/ui/input'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import {
   Pagination,
   PaginationContent,
@@ -29,6 +21,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

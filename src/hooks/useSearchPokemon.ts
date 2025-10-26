@@ -1,5 +1,5 @@
-import { useDebounce } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
+import { useDebounce } from '@/lib/utils'
 import { apiClient } from '../services/apiClient'
 
 interface PokemonListItem {

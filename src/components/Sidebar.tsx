@@ -124,14 +124,7 @@ export function SidebarItem({
   )
 
   if (collapsed) {
-    return (
-      <div className="relative group">
-        {buttonContent}
-        <div className="absolute left-full ml-2 px-3 py-1.5 bg-black text-white text-xs rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-nowrap z-50 top-1/2 -translate-y-1/2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-          {children}
-        </div>
-      </div>
-    )
+    return <div className="relative overflow-visible group">{buttonContent}</div>
   }
 
   return buttonContent
@@ -150,7 +143,7 @@ export function SidebarHeader({
     <div
       className={cn(
         'py-5 border-b-4 border-black',
-        'bg-primary/5',
+        'bg-background',
         collapsed ? 'px-2' : 'px-4',
         className
       )}
@@ -159,8 +152,8 @@ export function SidebarHeader({
         children
       ) : (
         <div className="flex justify-center">
-          <div className="flex items-center justify-center w-8 h-8 border-2 border-black rounded-md bg-primary">
-            <span className="text-xs font-bold text-primary-foreground">O</span>
+          <div className="flex items-center justify-center w-8 h-8 border-2 border-black rounded-md bg-background">
+            <span className="text-xs font-bold">O</span>
           </div>
         </div>
       )}
@@ -181,21 +174,13 @@ export function SidebarFooter({
     <div
       className={cn(
         'py-4 border-t-4 border-black',
-        'bg-primary/5',
+        'bg-background',
         'mt-auto',
         collapsed ? 'px-2' : 'px-4',
         className
       )}
     >
-      {!collapsed ? (
-        children
-      ) : (
-        <div className="flex justify-center">
-          <div className="flex items-center justify-center w-8 h-8 border-2 border-black rounded-full bg-primary">
-            <span className="text-xs font-bold text-primary-foreground">U</span>
-          </div>
-        </div>
-      )}
+      {children}
     </div>
   )
 }

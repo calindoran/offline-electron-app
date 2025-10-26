@@ -1,8 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { Edit, Save, Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/DataTable'
+import { PokemonSearch } from '@/components/PokemonSearch'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -15,7 +16,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { PokemonSearch } from '@/components/PokemonSearch'
 import type { LocalEntity } from '../db/indexedDb'
 import { useItems } from '../hooks/useItems'
 import { useMutateItem } from '../hooks/useMutateItem'
@@ -189,9 +189,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
           <form onSubmit={handleSubmit}>
             <DialogHeader>
               <DialogTitle>Pokémon Details</DialogTitle>
-              <DialogDescription>
-                View and edit your Pokémon information.
-              </DialogDescription>
+              <DialogDescription>View and edit your Pokémon information.</DialogDescription>
             </DialogHeader>
 
             <div className="p-6 space-y-4">
@@ -202,7 +200,10 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                   <div className="flex flex-col items-center gap-2">
                     <div className="border-4 border-black rounded-md p-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                       <img
-                        src={selectedPokemon.sprites.other?.['official-artwork']?.front_default || selectedPokemon.sprites.front_default}
+                        src={
+                          selectedPokemon.sprites.other?.['official-artwork']?.front_default ||
+                          selectedPokemon.sprites.front_default
+                        }
                         alt={selectedPokemon.name}
                         className="object-contain w-48 h-48"
                       />
@@ -223,7 +224,9 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                 {/* Info Section */}
                 <div className="flex-1 space-y-4">
                   <div className="p-4 border-2 border-black rounded-md bg-primary/5">
-                    <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Pokédex #</p>
+                    <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">
+                      Pokédex #
+                    </p>
                     <p className="text-2xl font-bold">#{selectedPokemon?.id}</p>
                   </div>
 
@@ -248,14 +251,22 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                   <div className="grid grid-cols-2 gap-4">
                     {selectedPokemon?.height !== undefined && (
                       <div className="p-4 border-2 border-black rounded-md">
-                        <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Height</p>
-                        <p className="text-lg font-bold">{(selectedPokemon.height / 10).toFixed(1)} m</p>
+                        <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">
+                          Height
+                        </p>
+                        <p className="text-lg font-bold">
+                          {(selectedPokemon.height / 10).toFixed(1)} m
+                        </p>
                       </div>
                     )}
                     {selectedPokemon?.weight !== undefined && (
                       <div className="p-4 border-2 border-black rounded-md">
-                        <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Weight</p>
-                        <p className="text-lg font-bold">{(selectedPokemon.weight / 10).toFixed(1)} kg</p>
+                        <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">
+                          Weight
+                        </p>
+                        <p className="text-lg font-bold">
+                          {(selectedPokemon.weight / 10).toFixed(1)} kg
+                        </p>
                       </div>
                     )}
                   </div>
@@ -265,7 +276,9 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
               {/* Abilities */}
               {selectedPokemon?.abilities && selectedPokemon.abilities.length > 0 && (
                 <div className="p-4 border-2 border-black rounded-md">
-                  <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">Abilities</p>
+                  <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">
+                    Abilities
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {selectedPokemon.abilities.map((abilityInfo) => (
                       <span
@@ -283,12 +296,16 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
               {/* Stats */}
               {selectedPokemon?.stats && selectedPokemon.stats.length > 0 && (
                 <div className="p-4 border-2 border-black rounded-md">
-                  <p className="mb-3 text-sm font-bold uppercase text-muted-foreground">Base Stats</p>
+                  <p className="mb-3 text-sm font-bold uppercase text-muted-foreground">
+                    Base Stats
+                  </p>
                   <div className="space-y-2">
                     {selectedPokemon.stats.map((statInfo) => (
                       <div key={statInfo.stat.name} className="space-y-1">
                         <div className="flex justify-between text-sm">
-                          <span className="font-bold capitalize">{statInfo.stat.name.replace('-', ' ')}</span>
+                          <span className="font-bold capitalize">
+                            {statInfo.stat.name.replace('-', ' ')}
+                          </span>
                           <span className="font-bold">{statInfo.base_stat}</span>
                         </div>
                         <div className="w-full h-4 overflow-hidden bg-gray-100 border-2 border-black rounded-md">
@@ -303,7 +320,8 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                   {selectedPokemon.base_experience && (
                     <div className="pt-3 mt-3 border-t-2 border-black">
                       <p className="text-sm">
-                        <span className="font-bold">Base Experience:</span> {selectedPokemon.base_experience}
+                        <span className="font-bold">Base Experience:</span>{' '}
+                        {selectedPokemon.base_experience}
                       </p>
                     </div>
                   )}

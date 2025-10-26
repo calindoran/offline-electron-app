@@ -10,7 +10,8 @@ function HomePage() {
       <div className="border-4 border-black rounded-md p-6 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         <h1 className="text-4xl font-bold mb-4">Welcome to Pokémon Collection!</h1>
         <p className="text-lg">
-          Your offline Pokémon collection app powered by the PokéAPI. Browse, organize, and manage your favorite Pokémon!
+          Your offline Pokémon collection app powered by the PokéAPI. Browse, organize, and manage
+          your favorite Pokémon!
         </p>
       </div>
 

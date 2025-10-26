@@ -1,15 +1,16 @@
-import { Plus, Search, Loader2, X } from 'lucide-react'
+import { Loader2, Plus, Search, X } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useSearchPokemon, useFetchPokemon } from '../hooks/useSearchPokemon'
 import { useMutateItem } from '../hooks/useMutateItem'
+import { useFetchPokemon, useSearchPokemon } from '../hooks/useSearchPokemon'
 
 export function PokemonSearch() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedPokemonName, setSelectedPokemonName] = useState<string | null>(null)
   const { searchResults, isSearching, hasResults } = useSearchPokemon(searchTerm)
-  const { data: selectedPokemon, isLoading: isLoadingPokemon } = useFetchPokemon(selectedPokemonName)
+  const { data: selectedPokemon, isLoading: isLoadingPokemon } =
+    useFetchPokemon(selectedPokemonName)
   const { upsertItem } = useMutateItem()
 
   const handleAddPokemon = () => {
@@ -127,14 +128,16 @@ export function PokemonSearch() {
               </div>
               {selectedPokemon.types && (
                 <div className="flex flex-wrap gap-2">
-                  {selectedPokemon.types.map((typeInfo: { slot: number; type: { name: string } }) => (
-                    <span
-                      key={typeInfo.slot}
-                      className="px-3 py-1 text-xs font-bold uppercase border-2 border-black rounded-md"
-                    >
-                      {typeInfo.type.name}
-                    </span>
-                  ))}
+                  {selectedPokemon.types.map(
+                    (typeInfo: { slot: number; type: { name: string } }) => (
+                      <span
+                        key={typeInfo.slot}
+                        className="px-3 py-1 text-xs font-bold uppercase border-2 border-black rounded-md"
+                      >
+                        {typeInfo.type.name}
+                      </span>
+                    )
+                  )}
                 </div>
               )}
               <Button onClick={handleAddPokemon} disabled={upsertItem.isPending}>
