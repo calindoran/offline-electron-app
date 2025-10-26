@@ -19,6 +19,40 @@ import type { LocalEntity } from '../db/indexedDb'
 import { useItems } from '../hooks/useItems'
 import { useMutateItem } from '../hooks/useMutateItem'
 
+// Helper function to get type colors
+const getTypeColor = (type: string): string => {
+  const colors: Record<string, string> = {
+    normal: 'bg-gray-400',
+    fire: 'bg-red-500 text-white',
+    water: 'bg-blue-500 text-white',
+    electric: 'bg-yellow-400',
+    grass: 'bg-green-500 text-white',
+    ice: 'bg-cyan-300',
+    fighting: 'bg-orange-700 text-white',
+    poison: 'bg-purple-500 text-white',
+    ground: 'bg-yellow-600 text-white',
+    flying: 'bg-indigo-400',
+    psychic: 'bg-pink-500 text-white',
+    bug: 'bg-lime-500',
+    rock: 'bg-yellow-800 text-white',
+    ghost: 'bg-purple-700 text-white',
+    dragon: 'bg-indigo-700 text-white',
+    dark: 'bg-gray-800 text-white',
+    steel: 'bg-gray-500 text-white',
+    fairy: 'bg-pink-300',
+  }
+  return colors[type] || 'bg-gray-300'
+}
+
+// Helper function to get stat bar colors
+const getStatColor = (stat: number): string => {
+  if (stat >= 150) return 'bg-green-600'
+  if (stat >= 100) return 'bg-green-500'
+  if (stat >= 80) return 'bg-blue-500'
+  if (stat >= 50) return 'bg-yellow-500'
+  return 'bg-red-500'
+}
+
 interface ItemsTableProps {
   itemId?: string
   onItemClick?: (id: string) => void
@@ -33,19 +67,19 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
     notes: '',
   })
 
-  // Find the selected item from URL
-  const selectedItem = itemId ? items.find((item) => item.id === itemId) : null
-  const isOpen = !!selectedItem
+  // Find the selected pokemon from URL
+  const selectedPokemon = itemId ? items.find((item) => item.id === itemId) : null
+  const isOpen = !!selectedPokemon
 
-  // Update form data when selected item changes
+  // Update form data when selected pokemon changes
   React.useEffect(() => {
-    if (selectedItem) {
+    if (selectedPokemon) {
       setFormData({
-        name: selectedItem.name,
-        notes: selectedItem.notes || '',
+        name: selectedPokemon.name,
+        notes: selectedPokemon.notes || '',
       })
     }
-  }, [selectedItem])
+  }, [selectedPokemon])
 
   const handleRowClick = (item: LocalEntity) => {
     if (onItemClick) {
@@ -61,9 +95,9 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (selectedItem) {
+    if (selectedPokemon) {
       upsertItem.mutate({
-        ...selectedItem,
+        ...selectedPokemon,
         name: formData.name,
         notes: formData.notes,
         updatedAt: Date.now(),
@@ -73,8 +107,8 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
   }
 
   const handleDelete = () => {
-    if (selectedItem) {
-      deleteItem.mutate(selectedItem.id)
+    if (selectedPokemon) {
+      deleteItem.mutate(selectedPokemon.id)
       handleDialogClose()
     }
   }
@@ -136,34 +170,145 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
   return (
     <>
       <div className="container flex flex-col h-full py-8 mx-auto">
-        <h1 className="mb-6 text-3xl font-bold">Poke Management</h1>
+        <h1 className="mb-6 text-3xl font-bold">Pokémon Collection</h1>
         <DataTable columns={columns} data={items}  />
       </div>
 
-      {/* Item Detail Dialog */}
+      {/* Pokemon Detail Dialog */}
       <Dialog open={isOpen} onOpenChange={(open) => !open && handleDialogClose()}>
-        <DialogContent>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <form onSubmit={handleSubmit}>
             <DialogHeader>
-              <DialogTitle>Edit Item</DialogTitle>
+              <DialogTitle>Pokémon Details</DialogTitle>
               <DialogDescription>
-                Make changes to your item here. Click save when you're done.
+                View and edit your Pokémon information.
               </DialogDescription>
             </DialogHeader>
 
             <div className="p-6 space-y-4">
-              <div className="p-4 border-2 border-black rounded-md bg-primary/5">
-                <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">ID</p>
-                <p className="text-lg">{selectedItem?.id}</p>
+              {/* Pokemon Image and Basic Info */}
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Image Section */}
+                {selectedPokemon?.sprites && (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="border-4 border-black rounded-md p-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                      <img
+                        src={selectedPokemon.sprites.other?.['official-artwork']?.front_default || selectedPokemon.sprites.front_default}
+                        alt={selectedPokemon.name}
+                        className="w-48 h-48 object-contain"
+                      />
+                    </div>
+                    {selectedPokemon.sprites.front_shiny && (
+                      <div className="border-4 border-yellow-400 rounded-md p-2 bg-yellow-50">
+                        <img
+                          src={selectedPokemon.sprites.front_shiny}
+                          alt={`${selectedPokemon.name} shiny`}
+                          className="w-24 h-24 object-contain"
+                        />
+                        <p className="text-xs text-center font-bold">✨ Shiny</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Info Section */}
+                <div className="flex-1 space-y-4">
+                  <div className="p-4 border-2 border-black rounded-md bg-primary/5">
+                    <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Pokédex #</p>
+                    <p className="text-2xl font-bold">#{selectedPokemon?.id}</p>
+                  </div>
+
+                  {/* Types */}
+                  {selectedPokemon?.types && selectedPokemon.types.length > 0 && (
+                    <div className="p-4 border-2 border-black rounded-md">
+                      <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">Type</p>
+                      <div className="flex gap-2 flex-wrap">
+                        {selectedPokemon.types.map((typeInfo) => (
+                          <span
+                            key={typeInfo.slot}
+                            className={`px-4 py-2 border-2 border-black rounded-md font-bold uppercase text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${getTypeColor(typeInfo.type.name)}`}
+                          >
+                            {typeInfo.type.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Physical Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {selectedPokemon?.height !== undefined && (
+                      <div className="p-4 border-2 border-black rounded-md">
+                        <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Height</p>
+                        <p className="text-lg font-bold">{(selectedPokemon.height / 10).toFixed(1)} m</p>
+                      </div>
+                    )}
+                    {selectedPokemon?.weight !== undefined && (
+                      <div className="p-4 border-2 border-black rounded-md">
+                        <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Weight</p>
+                        <p className="text-lg font-bold">{(selectedPokemon.weight / 10).toFixed(1)} kg</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
+              {/* Abilities */}
+              {selectedPokemon?.abilities && selectedPokemon.abilities.length > 0 && (
+                <div className="p-4 border-2 border-black rounded-md">
+                  <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">Abilities</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {selectedPokemon.abilities.map((abilityInfo) => (
+                      <span
+                        key={abilityInfo.slot}
+                        className={`px-3 py-1 border-2 border-black rounded-md text-sm ${abilityInfo.is_hidden ? 'bg-purple-200' : 'bg-blue-200'}`}
+                      >
+                        {abilityInfo.ability.name.replace('-', ' ')}
+                        {abilityInfo.is_hidden && ' (Hidden)'}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stats */}
+              {selectedPokemon?.stats && selectedPokemon.stats.length > 0 && (
+                <div className="p-4 border-2 border-black rounded-md">
+                  <p className="mb-3 text-sm font-bold uppercase text-muted-foreground">Base Stats</p>
+                  <div className="space-y-2">
+                    {selectedPokemon.stats.map((statInfo) => (
+                      <div key={statInfo.stat.name} className="space-y-1">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-bold capitalize">{statInfo.stat.name.replace('-', ' ')}</span>
+                          <span className="font-bold">{statInfo.base_stat}</span>
+                        </div>
+                        <div className="w-full h-4 border-2 border-black rounded-md bg-gray-100 overflow-hidden">
+                          <div
+                            className={`h-full ${getStatColor(statInfo.base_stat)}`}
+                            style={{ width: `${Math.min((statInfo.base_stat / 255) * 100, 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {selectedPokemon.base_experience && (
+                    <div className="mt-3 pt-3 border-t-2 border-black">
+                      <p className="text-sm">
+                        <span className="font-bold">Base Experience:</span> {selectedPokemon.base_experience}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Editable Fields */}
               <div className="space-y-3">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Enter item name"
+                  placeholder="Enter Pokémon name"
                 />
               </div>
 
@@ -173,7 +318,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                   id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Enter notes"
+                  placeholder="Add your personal notes about this Pokémon"
                   rows={4}
                 />
               </div>
@@ -184,12 +329,12 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                     Updated At
                   </p>
                   <p className="text-sm">
-                    {selectedItem && new Date(selectedItem.updatedAt).toLocaleString()}
+                    {selectedPokemon && new Date(selectedPokemon.updatedAt).toLocaleString()}
                   </p>
                 </div>
                 <div className="p-4 border-2 border-black rounded-md">
                   <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">Synced</p>
-                  <p className="text-2xl">{selectedItem?.isSynced ? '✅' : '⏳'}</p>
+                  <p className="text-2xl">{selectedPokemon?.isSynced ? '✅' : '⏳'}</p>
                 </div>
               </div>
             </div>
@@ -206,7 +351,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
               </Button>
               <Button type="button" variant="destructive" onClick={handleDelete}>
                 <Trash2 size={16} className="mr-2" />
-                Delete Item
+                Delete Pokémon
               </Button>
             </DialogFooter>
           </form>

@@ -1,8 +1,8 @@
 {
-  "name": "electron-offline-ts-app",
+  "name": "pokemon-electron-app",
   "version": "0.1.0",
   "private": true,
-  "description": "An offline-capable Electron application",
+  "description": "An offline-capable Pokémon collection Electron application",
   "author": "Calin Doran",
   "main": "electron/main.js",
   "scripts": {
@@ -21,8 +21,8 @@
     "check": "biome check src"
   },
   "build": {
-    "appId": "com.appPackage.electron-offline-app",
-    "productName": "Electron Offline App",
+    "appId": "com.appPackage.pokemon-collection-app",
+    "productName": "Pokémon Collection",
     "directories": {
       "buildResources": "assets",
       "output": "dist"

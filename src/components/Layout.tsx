@@ -14,8 +14,8 @@ export default function Layout({ children }: LayoutProps) {
     <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)}>
         <SidebarHeader>
-          <h2 className="text-lg font-bold">Offline App</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Electron Edition</p>
+          <h2 className="text-lg font-bold">Pokémon Collection</h2>
+          <p className="mt-1 text-xs text-muted-foreground">Offline Edition</p>
         </SidebarHeader>
 
         <div className="py-4">
@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
               <SidebarItem
                 icon={
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <title>Items</title>
+                    <title>Pokémon</title>
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -53,7 +53,7 @@ export default function Layout({ children }: LayoutProps) {
                 }
                 active={!!matchRoute({ to: '/items', fuzzy: true })}
               >
-                Items
+                Pokémon
               </SidebarItem>
             </Link>
           </SidebarSection>
@@ -88,11 +88,11 @@ export default function Layout({ children }: LayoutProps) {
 
         <SidebarFooter>
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8 border-2 border-black rounded-full bg-primary">
-              <span className="text-xs font-bold text-primary-foreground">U</span>
+            <div className="flex items-center justify-center w-8 h-8 bg-red-500 border-2 border-black rounded-full">
+              <span className="text-xs font-bold text-white">⚡</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">User</p>
+              <p className="text-sm font-medium truncate">Trainer</p>
               <p className="text-xs truncate text-muted-foreground">Offline Mode</p>
             </div>
           </div>
@@ -100,17 +100,10 @@ export default function Layout({ children }: LayoutProps) {
       </Sidebar>
 
       <div className="flex flex-col flex-1 h-screen overflow-hidden">
-        <header className="flex-shrink-0 border-b-4 border-black bg-primary/10 shadow-[0_4px_0px_0px_rgba(0,0,0,0.1)]">
-          <div className="flex items-center justify-between px-6 py-4">
-            <h1 className="text-2xl font-bold">Offline Electron App</h1>
-          </div>
-        </header>
-
         <main className="flex-1 px-6 py-6 overflow-y-auto">{children}</main>
-
         <footer className="flex-shrink-0 py-4 border-t-4 border-black bg-primary/5">
           <div className="px-6 text-sm text-center">
-            <p>© {new Date().getFullYear()} Offline Electron App | Made with Neobrutalism UI</p>
+            <p>© {new Date().getFullYear()} Pokémon Collection | Made with Neobrutalism UI</p>
           </div>
         </footer>
       </div>
