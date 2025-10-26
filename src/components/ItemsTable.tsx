@@ -1,7 +1,8 @@
-import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { Edit, Save, Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { DataTable } from '@/components/DataTable'
 import {
   Dialog,
   DialogClose,
@@ -13,14 +14,6 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
 import type { LocalEntity } from '../db/indexedDb'
 import { useItems } from '../hooks/useItems'
@@ -31,31 +24,6 @@ interface ItemsTableProps {
   onItemClick?: (id: string) => void
   onClose?: () => void
 }
-
-const columns: ColumnDef<LocalEntity>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: 'Updated At',
-    cell: (info) => new Date(info.getValue<number>()).toLocaleString(),
-  },
-  {
-    accessorKey: 'notes',
-    header: 'Notes',
-  },
-  {
-    accessorKey: 'isSynced',
-    header: 'Synced',
-    cell: (info) => (info.getValue<boolean>() ? '✅' : '⏳'),
-  },
-]
 
 export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableProps) {
   const { data: items = [] } = useItems()
@@ -111,65 +79,65 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
     }
   }
 
-  const table = useReactTable({
-    data: items,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+  const columns: ColumnDef<LocalEntity>[] = [
+    {
+      accessorKey: 'id',
+      header: 'ID',
+    },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+    },
+    {
+      accessorKey: 'updatedAt',
+      header: 'Updated At',
+      cell: (info) => new Date(info.getValue<number>()).toLocaleString(),
+    },
+    {
+      accessorKey: 'notes',
+      header: 'Notes',
+    },
+    {
+      accessorKey: 'isSynced',
+      header: 'Synced',
+      cell: (info) => (info.getValue<boolean>() ? '✅' : '⏳'),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                handleRowClick(row.original)
+              }}
+            >
+              <Edit size={16} className="mr-1" /> Edit
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={(e) => {
+                e.stopPropagation()
+                deleteItem.mutate(row.original.id)
+              }}
+            >
+              <Trash2 size={16} className="mr-1" /> Delete
+            </Button>
+          </div>
+        )
+      },
+    },
+  ]
 
   return (
     <>
-      <div className="container py-8 mx-auto">
+      <div className="container flex flex-col h-full py-8 mx-auto">
         <h1 className="mb-6 text-3xl font-bold">Poke Management</h1>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : typeof header.column.columnDef.header === 'function'
-                        ? header.column.columnDef.header(header.getContext())
-                        : header.column.columnDef.header}
-                  </TableHead>
-                ))}
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className="cursor-pointer hover:bg-primary/5"
-                onClick={() => handleRowClick(row.original)}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>{cell.getValue()?.toString() ?? ''}</TableCell>
-                ))}
-                <TableCell onClick={(e) => e.stopPropagation()}>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="noShadow"
-                      onClick={() => handleRowClick(row.original)}
-                    >
-                      <Edit size={16} className="mr-1" /> Edit
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => deleteItem.mutate(row.original.id)}
-                    >
-                      <Trash2 size={16} className="mr-1" /> Delete
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataTable columns={columns} data={items}  />
       </div>
 
       {/* Item Detail Dialog */}

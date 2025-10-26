@@ -6,7 +6,7 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+      className="relative w-full border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
     >
       <table
         data-slot="table"
@@ -18,7 +18,7 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
-  return <thead data-slot="table-header" className={cn('[&_tr]:border-b', className)} {...props} />
+  return <thead data-slot="table-header" className={cn('sticky top-0 z-10 [&_tr]:border-b', className)} {...props} />
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
@@ -59,7 +59,7 @@ function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
     <th
       data-slot="table-head"
       className={cn(
-        'text-foreground h-10 px-4 py-3 text-left align-middle font-bold whitespace-nowrap border-b-2 border-black bg-primary/10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+        'text-foreground h-10 px-4 py-3 text-left align-middle font-bold whitespace-nowrap border-b-2 border-black bg-background [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
         className
       )}
       {...props}
