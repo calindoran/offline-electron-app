@@ -15,11 +15,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { PokemonSearch } from '@/components/PokemonSearch'
 import type { LocalEntity } from '../db/indexedDb'
 import { useItems } from '../hooks/useItems'
 import { useMutateItem } from '../hooks/useMutateItem'
 
-// Helper function to get type colors
 const getTypeColor = (type: string): string => {
   const colors: Record<string, string> = {
     normal: 'bg-gray-400',
@@ -44,7 +44,6 @@ const getTypeColor = (type: string): string => {
   return colors[type] || 'bg-gray-300'
 }
 
-// Helper function to get stat bar colors
 const getStatColor = (stat: number): string => {
   if (stat >= 150) return 'bg-green-600'
   if (stat >= 100) return 'bg-green-500'
@@ -67,11 +66,9 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
     notes: '',
   })
 
-  // Find the selected pokemon from URL
   const selectedPokemon = itemId ? items.find((item) => item.id === itemId) : null
   const isOpen = !!selectedPokemon
 
-  // Update form data when selected pokemon changes
   React.useEffect(() => {
     if (selectedPokemon) {
       setFormData({
@@ -139,6 +136,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
     {
       id: 'actions',
       header: 'Actions',
+      enableSorting: false,
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
@@ -169,12 +167,23 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
 
   return (
     <>
-      <div className="container flex flex-col h-full py-8 mx-auto">
-        <h1 className="mb-6 text-3xl font-bold">Pokémon Collection</h1>
-        <DataTable columns={columns} data={items}  />
+      <div className="container flex flex-col h-full py-8 mx-auto space-y-2">
+        <h1 className="text-3xl font-bold">Pokémon Collection</h1>
+
+        <div className="border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6 bg-white">
+          <h2 className="mb-4 text-xl font-bold">Add New Pokémon</h2>
+          <PokemonSearch />
+        </div>
+
+        <DataTable
+          columns={columns}
+          data={items}
+          searchColumn="name"
+          additionalSearchColumns={['id']}
+          searchPlaceholder="Search your collection by name or ID..."
+        />
       </div>
 
-      {/* Pokemon Detail Dialog */}
       <Dialog open={isOpen} onOpenChange={(open) => !open && handleDialogClose()}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <form onSubmit={handleSubmit}>
@@ -187,7 +196,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
 
             <div className="p-6 space-y-4">
               {/* Pokemon Image and Basic Info */}
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col gap-4 md:flex-row">
                 {/* Image Section */}
                 {selectedPokemon?.sprites && (
                   <div className="flex flex-col items-center gap-2">
@@ -195,17 +204,17 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                       <img
                         src={selectedPokemon.sprites.other?.['official-artwork']?.front_default || selectedPokemon.sprites.front_default}
                         alt={selectedPokemon.name}
-                        className="w-48 h-48 object-contain"
+                        className="object-contain w-48 h-48"
                       />
                     </div>
                     {selectedPokemon.sprites.front_shiny && (
-                      <div className="border-4 border-yellow-400 rounded-md p-2 bg-yellow-50">
+                      <div className="p-2 border-4 border-yellow-400 rounded-md bg-yellow-50">
                         <img
                           src={selectedPokemon.sprites.front_shiny}
                           alt={`${selectedPokemon.name} shiny`}
-                          className="w-24 h-24 object-contain"
+                          className="object-contain w-24 h-24"
                         />
-                        <p className="text-xs text-center font-bold">✨ Shiny</p>
+                        <p className="text-xs font-bold text-center">✨ Shiny</p>
                       </div>
                     )}
                   </div>
@@ -222,7 +231,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                   {selectedPokemon?.types && selectedPokemon.types.length > 0 && (
                     <div className="p-4 border-2 border-black rounded-md">
                       <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">Type</p>
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex flex-wrap gap-2">
                         {selectedPokemon.types.map((typeInfo) => (
                           <span
                             key={typeInfo.slot}
@@ -257,7 +266,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
               {selectedPokemon?.abilities && selectedPokemon.abilities.length > 0 && (
                 <div className="p-4 border-2 border-black rounded-md">
                   <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">Abilities</p>
-                  <div className="flex gap-2 flex-wrap">
+                  <div className="flex flex-wrap gap-2">
                     {selectedPokemon.abilities.map((abilityInfo) => (
                       <span
                         key={abilityInfo.slot}
@@ -282,7 +291,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                           <span className="font-bold capitalize">{statInfo.stat.name.replace('-', ' ')}</span>
                           <span className="font-bold">{statInfo.base_stat}</span>
                         </div>
-                        <div className="w-full h-4 border-2 border-black rounded-md bg-gray-100 overflow-hidden">
+                        <div className="w-full h-4 overflow-hidden bg-gray-100 border-2 border-black rounded-md">
                           <div
                             className={`h-full ${getStatColor(statInfo.base_stat)}`}
                             style={{ width: `${Math.min((statInfo.base_stat / 255) * 100, 100)}%` }}
@@ -292,7 +301,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                     ))}
                   </div>
                   {selectedPokemon.base_experience && (
-                    <div className="mt-3 pt-3 border-t-2 border-black">
+                    <div className="pt-3 mt-3 border-t-2 border-black">
                       <p className="text-sm">
                         <span className="font-bold">Base Experience:</span> {selectedPokemon.base_experience}
                       </p>
@@ -347,11 +356,11 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
               </DialogClose>
               <Button type="submit">
                 <Save size={16} className="mr-2" />
-                Save Changes
+                Save
               </Button>
               <Button type="button" variant="destructive" onClick={handleDelete}>
                 <Trash2 size={16} className="mr-2" />
-                Delete Pokémon
+                Delete
               </Button>
             </DialogFooter>
           </form>
