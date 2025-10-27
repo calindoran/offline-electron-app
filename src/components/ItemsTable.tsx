@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import type { LocalEntity } from '../db/indexedDb'
 import { useItems } from '../hooks/useItems'
 import { useMutateItem } from '../hooks/useMutateItem'
+import { Card } from './ui/card'
 
 const getTypeColor = (type: string): string => {
   const colors: Record<string, string> = {
@@ -169,10 +170,10 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
     <div className="flex flex-col h-full gap-6">
       <h1 className="text-3xl font-bold">Pokémon Collection</h1>
 
-      <div className="flex-shrink-0 border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6 bg-white">
+      <Card className="p-4">
         <h2 className="mb-4 text-xl font-bold">Add New Pokémon</h2>
         <PokemonSearch />
-      </div>
+      </Card>
 
       <div className="flex-1 min-h-0">
         <DataTable

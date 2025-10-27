@@ -3,10 +3,10 @@ import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Switch } from '@/components/ui/switch'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useDataSync } from '@/hooks/useDataSync'
 import type { AppInfo } from '@/types/electron'
 
@@ -23,8 +23,7 @@ function SettingsPage() {
   const [activeMode, setActiveMode] = React.useState<'direct' | 'ipc'>('direct')
   const [notifications, setNotifications] = React.useState(false)
   const [autoSync, setAutoSync] = React.useState(false)
-  const [darkMode, setDarkMode] = React.useState(false)
-  const [neobrutalism, setNeobrutalism] = React.useState(true)
+  const { darkMode, setDarkMode, neobrutalism, setNeobrutalism } = useTheme()
 
   React.useEffect(() => {
     if (directSync.isElectron && window.electronAPI.getAppInfo) {
@@ -75,14 +74,14 @@ function SettingsPage() {
                 <Switch id="dark-mode" checked={darkMode} onCheckedChange={setDarkMode} />
               </div>
               <div className="flex items-center gap-3 space-between">
-                <Checkbox
-                  id="neobrutalism"
-                  checked={neobrutalism}
-                  onCheckedChange={(checked) => setNeobrutalism(checked as boolean)}
-                />
                 <Label htmlFor="neobrutalism" className="flex-1 cursor-pointer">
                   Neobrutalism style (recommended)
                 </Label>
+                <Switch
+                  id="neobrutalism"
+                  checked={neobrutalism}
+                  onCheckedChange={setNeobrutalism}
+                />
               </div>
             </div>
           </CardContent>
@@ -145,7 +144,7 @@ function SettingsPage() {
               </div>
 
               <Card
-                className={`border-2 border-black ${currentSync.isSyncing ? 'bg-yellow-50' : 'bg-green-50'}`}
+                className={`border-2 ${currentSync.isSyncing ? 'bg-yellow-50 dark:bg-yellow-950/30 dark:border-yellow-700' : 'bg-green-50 dark:bg-green-950/30 dark:border-green-700'}`}
               >
                 <CardContent className="pt-4">
                   <h4 className="mb-3 font-semibold">Sync Status</h4>
@@ -190,7 +189,7 @@ function SettingsPage() {
                         </div>
                       )}
                       {currentSync.syncProgress.status === 'completed' && (
-                        <p className="text-sm text-green-700">
+                        <p className="text-sm text-green-700 dark:text-green-400">
                           ✓ Completed: {currentSync.syncProgress.successful} successful,
                           {currentSync.syncProgress.failed} failed
                         </p>
@@ -209,7 +208,7 @@ function SettingsPage() {
                 {currentSync.isSyncing ? 'Syncing...' : 'Trigger Sync Now'}
               </Button>
 
-              <Card className="border-2 border-black bg-blue-50">
+              <Card className="border-2 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-700">
                 <CardContent className="pt-4">
                   <h4 className="mb-3 font-semibold">How It Works</h4>
                   <ul className="space-y-2 text-sm">
