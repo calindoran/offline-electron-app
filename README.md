@@ -74,6 +74,13 @@ npm run pack:win
 npm run pack:all
 ```
 
+## 📸 Screenshots
+
+![main pokemon collection screen](assets/screenshots/main.png)
+
+![main pokemon collection add pokemon modal](assets/screenshots/main-details.png)
+
+
 ## 📱 Application Features
 
 ### Pokémon Collection Management
