@@ -21,7 +21,7 @@ import { useItems } from '../hooks/useItems'
 import { useMutateItem } from '../hooks/useMutateItem'
 import { Card } from './ui/card'
 
-const getTypeColor = (type: string): string => {
+export const getTypeColor = (type: string): string => {
   const colors: Record<string, string> = {
     normal: 'bg-gray-400',
     fire: 'bg-red-500 text-white',
