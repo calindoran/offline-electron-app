@@ -166,15 +166,15 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
   ]
 
   return (
-    <>
-      <div className="container flex flex-col h-full py-8 mx-auto space-y-2">
-        <h1 className="text-3xl font-bold">Pokémon Collection</h1>
+    <div className="flex flex-col h-full gap-6">
+      <h1 className="text-3xl font-bold">Pokémon Collection</h1>
 
-        <div className="border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6 bg-white">
-          <h2 className="mb-4 text-xl font-bold">Add New Pokémon</h2>
-          <PokemonSearch />
-        </div>
+      <div className="flex-shrink-0 border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6 bg-white">
+        <h2 className="mb-4 text-xl font-bold">Add New Pokémon</h2>
+        <PokemonSearch />
+      </div>
 
+      <div className="flex-1 min-h-0">
         <DataTable
           columns={columns}
           data={items}
@@ -193,9 +193,7 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
             </DialogHeader>
 
             <div className="p-6 space-y-4">
-              {/* Pokemon Image and Basic Info */}
               <div className="flex flex-col gap-4 md:flex-row">
-                {/* Image Section */}
                 {selectedPokemon?.sprites && (
                   <div className="flex flex-col items-center gap-2">
                     <div className="border-4 border-black rounded-md p-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -221,7 +219,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                   </div>
                 )}
 
-                {/* Info Section */}
                 <div className="flex-1 space-y-4">
                   <div className="p-4 border-2 border-black rounded-md bg-primary/5">
                     <p className="mb-1 text-sm font-bold uppercase text-muted-foreground">
@@ -230,7 +227,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                     <p className="text-2xl font-bold">#{selectedPokemon?.id}</p>
                   </div>
 
-                  {/* Types */}
                   {selectedPokemon?.types && selectedPokemon.types.length > 0 && (
                     <div className="p-4 border-2 border-black rounded-md">
                       <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">Type</p>
@@ -247,7 +243,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                     </div>
                   )}
 
-                  {/* Physical Stats */}
                   <div className="grid grid-cols-2 gap-4">
                     {selectedPokemon?.height !== undefined && (
                       <div className="p-4 border-2 border-black rounded-md">
@@ -273,7 +268,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                 </div>
               </div>
 
-              {/* Abilities */}
               {selectedPokemon?.abilities && selectedPokemon.abilities.length > 0 && (
                 <div className="p-4 border-2 border-black rounded-md">
                   <p className="mb-2 text-sm font-bold uppercase text-muted-foreground">
@@ -293,7 +287,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                 </div>
               )}
 
-              {/* Stats */}
               {selectedPokemon?.stats && selectedPokemon.stats.length > 0 && (
                 <div className="p-4 border-2 border-black rounded-md">
                   <p className="mb-3 text-sm font-bold uppercase text-muted-foreground">
@@ -328,7 +321,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
                 </div>
               )}
 
-              {/* Editable Fields */}
               <div className="space-y-3">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -384,6 +376,6 @@ export default function ItemsTable({ itemId, onItemClick, onClose }: ItemsTableP
           </form>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   )
 }
