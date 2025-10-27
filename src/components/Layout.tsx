@@ -1,5 +1,5 @@
 import { Link, useMatchRoute } from '@tanstack/react-router'
-import { Home, LogOut, Settings, User } from 'lucide-react'
+import { Home, List, LogOut, Settings, User } from 'lucide-react'
 import React from 'react'
 import { cn } from '@/lib/utils'
 import { Sidebar, SidebarFooter, SidebarHeader, SidebarItem, SidebarSection } from './Sidebar'
@@ -57,6 +57,17 @@ export default function Layout({ children }: LayoutProps) {
                 active={!!matchRoute({ to: '/settings' })}
               >
                 Settings
+              </SidebarItem>
+            </Link>
+          </SidebarSection>
+
+          <SidebarSection title="UI Components">
+            <Link to="/examples">
+              <SidebarItem
+                icon={<List className="w-4 h-4" />}
+                active={!!matchRoute({ to: '/examples' })}
+              >
+                Examples
               </SidebarItem>
             </Link>
           </SidebarSection>
